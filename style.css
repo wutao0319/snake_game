@@ -229,6 +229,9 @@ button:active {
 
 .game-stage {
   position: relative;
+  touch-action: none;
+  user-select: none;
+  -webkit-user-select: none;
 }
 
 canvas {
@@ -413,34 +416,6 @@ canvas {
   }
 }
 
-.touch-controls {
-  display: none;
-  margin-top: 16px;
-  justify-items: center;
-  gap: 10px;
-}
-
-.touch-middle {
-  display: grid;
-  grid-template-columns: repeat(3, 64px);
-  gap: 10px;
-}
-
-.touch-btn {
-  width: 64px;
-  height: 64px;
-  padding: 0;
-  display: grid;
-  place-items: center;
-  font-size: 24px;
-  line-height: 1;
-}
-
-.touch-up,
-.touch-down {
-  justify-self: center;
-}
-
 .tips {
   margin-top: 14px;
   font-size: 14px;
@@ -534,7 +509,4 @@ canvas {
     width: 100%;
   }
 
-  .touch-controls {
-    display: grid;
-  }
 }

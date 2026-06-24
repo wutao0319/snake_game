@@ -8,10 +8,10 @@ const startBtn = document.getElementById("start-btn");
 const pauseBtn = document.getElementById("pause-btn");
 const restartBtn = document.getElementById("restart-btn");
 const soundBtn = document.getElementById("sound-btn");
+const gameStageEl = document.querySelector(".game-stage");
 const startOverlayEl = document.getElementById("start-overlay");
 const startTitleEl = document.getElementById("start-title");
 const startSubtitleEl = document.getElementById("start-subtitle");
-const touchButtons = document.querySelectorAll("[data-direction], [data-action]");
 
 const gridSize = 20;
 const tileCount = canvas.width / gridSize;
@@ -74,6 +74,7 @@ let isPaused = false;
 let isCountingDown = false;
 let gameEnded = false;
 let speed = initialSpeed;
+let swipeStartPoint = null;
 
 ctx.imageSmoothingEnabled = false;
 
@@ -470,6 +471,26 @@ function handleDirectionChange(key) {
   return true;
 }
 
+function handleSwipeGesture(startPoint, endPoint) {
+  if (!startPoint || !endPoint) {
+    return false;
+  }
+
+  const deltaX = endPoint.x - startPoint.x;
+  const deltaY = endPoint.y - startPoint.y;
+  const threshold = 24;
+
+  if (Math.abs(deltaX) < threshold && Math.abs(deltaY) < threshold) {
+    return false;
+  }
+
+  if (Math.abs(deltaX) > Math.abs(deltaY)) {
+    return handleDirectionChange(deltaX > 0 ? "right" : "left");
+  }
+
+  return handleDirectionChange(deltaY > 0 ? "down" : "up");
+}
+
 function loadRankings() {
   try {
     const stored = window.localStorage.getItem(rankingStorageKey);
@@ -769,19 +790,27 @@ document.addEventListener("keydown", (event) => {
   }
 });
 
-touchButtons.forEach((button) => {
-  button.addEventListener("pointerdown", (event) => {
-    event.preventDefault();
-    unlockAudio();
+gameStageEl.addEventListener("pointerdown", (event) => {
+  if (event.pointerType !== "touch") {
+    return;
+  }
 
-    const action = button.dataset.action;
-    if (action === "toggle-pause") {
-      togglePause();
-      return;
-    }
+  unlockAudio();
+  swipeStartPoint = { x: event.clientX, y: event.clientY };
+});
 
-    handleDirectionChange(button.dataset.direction);
-  });
+gameStageEl.addEventListener("pointerup", (event) => {
+  if (event.pointerType !== "touch") {
+    return;
+  }
+
+  event.preventDefault();
+  handleSwipeGesture(swipeStartPoint, { x: event.clientX, y: event.clientY });
+  swipeStartPoint = null;
+});
+
+gameStageEl.addEventListener("pointercancel", () => {
+  swipeStartPoint = null;
 });
 
 startBtn.addEventListener("click", startGame);
