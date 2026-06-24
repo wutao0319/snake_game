@@ -8,15 +8,26 @@
 </head>
 <body>
   <main class="app">
-    <section class="panel">
+    <section class="panel game-panel">
       <div class="header">
-        <div>
-          <h1>贪吃蛇</h1>
-          <p>方向键 / WASD 控制移动，空格暂停。</p>
+        <div class="hero-copy">
+          <p class="eyebrow">PIXEL ARCADE</p>
+          <div class="logo-sign" aria-label="贪吃蛇游戏标题">
+            <span class="logo-glow">贪吃蛇</span>
+            <h1>贪吃蛇</h1>
+            <span class="logo-shadow">贪吃蛇</span>
+          </div>
+          <p>方向键 / WASD 控制移动，空格暂停，手机可点下方按键。</p>
         </div>
-        <div class="score-board">
-          <span>分数</span>
-          <strong id="score">0</strong>
+        <div class="score-wrap">
+          <div class="score-board">
+            <span>当前分数</span>
+            <strong id="score">0</strong>
+          </div>
+          <div class="score-board best-score">
+            <span>最高分</span>
+            <strong id="best-score">0</strong>
+          </div>
         </div>
       </div>
 
@@ -24,18 +35,44 @@
         <button id="start-btn" type="button">开始游戏</button>
         <button id="pause-btn" type="button">暂停</button>
         <button id="restart-btn" type="button">重新开始</button>
+        <button id="sound-btn" type="button">音效：开</button>
       </div>
 
       <div class="status-bar">
         <span id="status">点击“开始游戏”开始</span>
       </div>
 
-      <canvas id="game" width="400" height="400" aria-label="贪吃蛇游戏画布"></canvas>
+      <div class="game-stage">
+        <canvas id="game" width="400" height="400" aria-label="贪吃蛇游戏画布"></canvas>
+        <div id="start-overlay" class="start-overlay" aria-hidden="true">
+          <div class="start-overlay-card">
+            <p id="start-subtitle" class="start-subtitle">准备出发</p>
+            <strong id="start-title" class="start-title">READY</strong>
+            <span class="start-logo">SNAKE ARCADE</span>
+          </div>
+        </div>
+      </div>
+
+      <div class="touch-controls" aria-label="手机方向控制">
+        <button class="touch-btn touch-up" type="button" data-direction="up" aria-label="向上">▲</button>
+        <div class="touch-middle">
+          <button class="touch-btn" type="button" data-direction="left" aria-label="向左">◀</button>
+          <button class="touch-btn touch-center" type="button" data-action="toggle-pause" aria-label="暂停或继续">■</button>
+          <button class="touch-btn" type="button" data-direction="right" aria-label="向右">▶</button>
+        </div>
+        <button class="touch-btn touch-down" type="button" data-direction="down" aria-label="向下">▼</button>
+      </div>
 
       <div class="tips">
         <p>规则：吃到食物得分，撞墙或撞到自己则游戏结束。</p>
       </div>
     </section>
+
+    <aside class="panel side-panel">
+      <h2>排行榜</h2>
+      <p class="ranking-note">保存最近 5 次最高得分记录，只存你当前浏览器。</p>
+      <ol id="ranking-list" class="ranking-list" aria-label="分数排行榜"></ol>
+    </aside>
   </main>
 
   <script src="script.js"></script>
